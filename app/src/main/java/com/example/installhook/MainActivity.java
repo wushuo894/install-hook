@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements IXposedHookLoadPa
             return;
         }
 
+        // 自动开始安装
         XposedHelpers.findAndHookMethod("com.android.packageinstaller.PackageInstallerActivity", lpparam.classLoader, "bindUi", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements IXposedHookLoadPa
             }
         });
 
+        // 安装成功自动点击完成
         XposedHelpers.findAndHookMethod("com.android.packageinstaller.InstallSuccess", lpparam.classLoader, "onCreate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
