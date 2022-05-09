@@ -1,5 +1,6 @@
 package com.example.installhook;
 
+import android.os.Bundle;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -39,11 +40,11 @@ public class Hook implements IXposedHookLoadPackage {
         });
 
         // 安装成功自动点击完成
-        XposedHelpers.findAndHookMethod("com.android.packageinstaller.InstallSuccess", lpparam.classLoader, "onCreate", new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(lpparam.classLoader.loadClass("com.android.packageinstaller.InstallSuccess"), "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Object mAlert = XposedHelpers.getObjectField(param.thisObject, "mAlert");
-                Object button = XposedHelpers.callMethod(mAlert, "getButton", -1);
+                Object button = XposedHelpers.callMethod(mAlert, "getButton", -2);
                 XposedHelpers.callMethod(button, "callOnClick");
                 super.afterHookedMethod(param);
             }
