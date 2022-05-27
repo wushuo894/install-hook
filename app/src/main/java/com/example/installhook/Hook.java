@@ -8,6 +8,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class Hook implements IXposedHookLoadPackage {
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         XposedBridge.log(lpparam.packageName);
@@ -15,7 +16,7 @@ public class Hook implements IXposedHookLoadPackage {
             return;
         }
 
-        Class<?> aClass = lpparam.classLoader.loadClass("com.android.packageinstaller.oplus.common.FeatureOption");
+        Class<?> aClass = XposedHelpers.findClass("com.android.packageinstaller.oplus.common.FeatureOption", lpparam.classLoader);
 
         // 关闭安全检测
         XposedHelpers.setStaticBooleanField(aClass, "sIsSecurityPayEnable", false);
